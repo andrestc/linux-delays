@@ -7,6 +7,15 @@
 #include <unistd.h>
 #include <linux/taskstats.h>
 
+/*
+*   This utility is based on linux/tools/accounting/getdelays.c 
+*   (https://github.com/torvalds/linux/blob/master/tools/accounting/getdelays.c) and
+*   uses libnl to get per-pid delay accounting statistics from the kernel.
+*   Usage:
+*       make
+*       sudo ./getdelays <PID>
+*/
+
 #define average_ms(t, c) (t / 1000000ULL / (c ? c : 1))
 
 static void print_delayacct(struct taskstats *t)
