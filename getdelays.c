@@ -61,7 +61,7 @@ int callback_message(struct nl_msg *nlmsg, void *arg) {
     nlhdr = nlmsg_hdr(nlmsg);
     
     if ((answer = genlmsg_parse(nlhdr, 0, nlattrs, TASKSTATS_TYPE_MAX, NULL)) < 0) {
-        printf("error parsing msg\n");
+        fprintf(stderr, "error parsing msg\n");
         return -1;
     }
     
@@ -69,7 +69,7 @@ int callback_message(struct nl_msg *nlmsg, void *arg) {
         stats = nla_data(nla_next(nla_data(nlattr), &rem));
         print_delayacct(stats);
     } else {
-        printf("unknown attribute format received\n");
+        fprintf(stderr, "unknown attribute format received\n");
     }
     return 0;
 }
