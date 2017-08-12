@@ -1,12 +1,3 @@
-#include <netlink/attr.h>
-#include <netlink/netlink.h>
-#include <netlink/genl/genl.h>
-#include <netlink/genl/ctrl.h>
-#include <netlink/socket.h>
-#include <netlink/msg.h>
-#include <unistd.h>
-#include <linux/taskstats.h>
-
 /*
 *   This utility is based on linux/tools/accounting/getdelays.c 
 *   (https://github.com/torvalds/linux/blob/master/tools/accounting/getdelays.c) and
@@ -15,6 +6,15 @@
 *       make
 *       sudo ./getdelays <PID>
 */
+
+#include <netlink/attr.h>
+#include <netlink/netlink.h>
+#include <netlink/genl/genl.h>
+#include <netlink/genl/ctrl.h>
+#include <netlink/socket.h>
+#include <netlink/msg.h>
+#include <unistd.h>
+#include <linux/taskstats.h>
 
 #define average_ms(t, c) (t / 1000000ULL / (c ? c : 1))
 
