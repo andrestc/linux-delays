@@ -70,6 +70,7 @@ int callback_message(struct nl_msg *nlmsg, void *arg) {
         print_delayacct(stats);
     } else {
         fprintf(stderr, "unknown attribute format received\n");
+        return -1;
     }
     return 0;
 }
