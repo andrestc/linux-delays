@@ -1,9 +1,18 @@
-CC := $(CROSS_COMPILE)gcc
-CFLAGS :=-g -Wall -Wextra -I../../usr/include `pkg-config --cflags --libs libnl-3.0`
+CC=gcc
+CFLAGS=-Wall $(shell pkg-config --cflags --libs libnl-3.0 libnl-genl-3.0)
 
-PROGS := getdelaysln
+ODIR=obj
 
-all: $(PROGS)
+_OBJ = getdelays.o
+OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
+
+$(ODIR)/%.o: %.c $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+getdelays: $(OBJ)
+	gcc -o $@ $^ $(CFLAGS) $(LIBS)
+
+.PHONY: clean
 
 clean:
-	rm -fr $(PROGS)
+	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~

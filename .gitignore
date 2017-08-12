@@ -1,1 +1,3 @@
-getdelaysln
+.vscode/
+*.o
+getdelays
