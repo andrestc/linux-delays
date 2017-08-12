@@ -11,7 +11,8 @@
 
 static void print_delayacct(struct taskstats *t)
 {
-	printf("\n\nCPU   %15s%15s%15s%15s%15s\n"
+    printf("[PID] %d", t->ac_pid);
+	printf("\nCPU   %15s%15s%15s%15s%15s\n"
 	       "      %15llu%15llu%15llu%15llu%15.3fms\n"
 	       "IO    %15s%15s%15s\n"
 	       "      %15llu%15llu%15llums\n"
@@ -71,7 +72,12 @@ int main(int argc, char *argv[])
     struct nlmsghdr *hdr;
     struct nl_msg *msg;
     struct nl_sock *sk;
+    pid_t pid;
     int err, family, exit_code = 0;
+    
+    pid = getpid();
+    if (argc >= 2)
+        pid = atoi(argv[1]);
 
     sk = nl_socket_alloc();
     if (sk == NULL) {
@@ -112,7 +118,7 @@ int main(int argc, char *argv[])
         goto teardown;
     }
 
-    if ((err = nla_put_u32(msg, TASKSTATS_CMD_ATTR_PID, getpid())) < 0) {
+    if ((err = nla_put_u32(msg, TASKSTATS_CMD_ATTR_PID, pid)) < 0) {
         fprintf(stderr, "Error setting attribute: %s\n", nl_geterror(err));
         exit_code = 1;
         goto teardown;
