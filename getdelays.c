@@ -97,7 +97,6 @@ int main(int argc, char *argv[])
         exit_code = 1;
         goto teardown;
     }
-    fprintf(stdout, "[FAMILY ID]: %d\n", family);
     
     if ((err = nl_socket_modify_cb(sk, NL_CB_VALID, NL_CB_CUSTOM, callback_message, NULL)) < 0) {
         fprintf(stderr, "Error setting socket cb: %s\n", nl_geterror(err));
