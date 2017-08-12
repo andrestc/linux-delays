@@ -16,3 +16,6 @@ getdelays: $(OBJ)
 
 clean:
 	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~
+
+dbg: getdelays
+	NLDBG=1 NLCB=debug ./getdelays 
