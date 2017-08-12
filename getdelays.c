@@ -65,8 +65,7 @@ int callback_message(struct nl_msg *nlmsg, void *arg) {
         return -1;
     }
     
-    if ((nlattr = nlattrs[TASKSTATS_TYPE_AGGR_TGID]) || (nlattr = nlattrs[TASKSTATS_TYPE_AGGR_PID]) || 
-        (nlattr = nlattrs[TASKSTATS_TYPE_NULL])) {
+    if ((nlattr = nlattrs[TASKSTATS_TYPE_AGGR_PID]) || (nlattr = nlattrs[TASKSTATS_TYPE_NULL])) {
         stats = nla_data(nla_next(nla_data(nlattr), &rem));
         print_delayacct(stats);
     } else {
@@ -106,7 +105,7 @@ int main(int argc, char *argv[])
         exit_code = 1;
         goto teardown;
     }
-    
+
     if ((err = nl_socket_modify_cb(sk, NL_CB_VALID, NL_CB_CUSTOM, callback_message, NULL)) < 0) {
         fprintf(stderr, "Error setting socket cb: %s\n", nl_geterror(err));
         exit_code = 1;
