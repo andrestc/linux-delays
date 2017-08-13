@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
         goto teardown;
     }
 
-    if ((family = genl_ctrl_resolve(sk, "TASKSTATS")) == 0) {
+    if ((family = genl_ctrl_resolve(sk, TASKSTATS_GENL_NAME)) == 0) {
         fprintf(stderr, "Error retrieving family id: %s\n", nl_geterror(err));
         exit_code = 1;
         goto teardown;
