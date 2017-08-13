@@ -1,5 +1,5 @@
 /*
-*   This utility is based on linux/tools/accounting/getdelays.c 
+*   This utility is based on linux/tools/accounting/getdelays.c
 *   (https://github.com/torvalds/linux/blob/master/tools/accounting/getdelays.c) and
 *   uses libnl to get per-pid delay accounting statistics from the kernel.
 *   Usage:
@@ -51,20 +51,20 @@ static void print_delayacct(struct taskstats *t)
 }
 
 int callback_message(struct nl_msg *nlmsg, void *arg) {
-    
+
     struct nlmsghdr *nlhdr;
     struct nlattr *nlattrs[TASKSTATS_TYPE_MAX + 1];
     struct nlattr *nlattr;
     struct taskstats *stats;
     int rem, answer;
-    
+
     nlhdr = nlmsg_hdr(nlmsg);
-    
+
     if ((answer = genlmsg_parse(nlhdr, 0, nlattrs, TASKSTATS_TYPE_MAX, NULL)) < 0) {
         fprintf(stderr, "error parsing msg\n");
         return -1;
     }
-    
+
     if ((nlattr = nlattrs[TASKSTATS_TYPE_AGGR_PID]) || (nlattr = nlattrs[TASKSTATS_TYPE_NULL])) {
         stats = nla_data(nla_next(nla_data(nlattr), &rem));
         print_delayacct(stats);
@@ -74,7 +74,7 @@ int callback_message(struct nl_msg *nlmsg, void *arg) {
     }
     return 0;
 }
-    
+
 
 int main(int argc, char *argv[])
 {
@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
     struct nl_sock *sk;
     pid_t pid;
     int err, family, exit_code = 0;
-    
+
     pid = getpid();
     if (argc >= 2)
         pid = atoi(argv[1]);
@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
         exit_code = 1;
         goto teardown;
     }
-    
+
     if ((family = genl_ctrl_resolve(sk, "TASKSTATS")) == 0) {
         fprintf(stderr, "Error retrieving family id: %s\n", nl_geterror(err));
         exit_code = 1;
@@ -111,15 +111,15 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Error setting socket cb: %s\n", nl_geterror(err));
         exit_code = 1;
         goto teardown;
-    }    
-        
+    }
+
     if (!(msg = nlmsg_alloc())) {
         fprintf(stderr, "Failed to alloc message: %s\n", nl_geterror(err));
         exit_code = 1;
         goto teardown;
     }
 
-    if (!(hdr = genlmsg_put(msg, NL_AUTO_PID, NL_AUTO_SEQ, family, 0, 
+    if (!(hdr = genlmsg_put(msg, NL_AUTO_PID, NL_AUTO_SEQ, family, 0,
         NLM_F_REQUEST, TASKSTATS_CMD_GET, TASKSTATS_VERSION))) {
         fprintf(stderr, "Error setting message header\n");
         exit_code = 1;
@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
         exit_code = 1;
         goto teardown;
     }
-    
+
     if ((err = nl_send_auto(sk, msg)) < 0) {
         fprintf(stderr, "Error sending message: %s\n", nl_geterror(err));
         exit_code = 1;
@@ -143,9 +143,10 @@ int main(int argc, char *argv[])
         exit_code = 1;
         goto teardown;
     }
-        
+
 teardown:
     nl_close(sk);
     nl_socket_free(sk);
-    return exit_code; 
+    nlmsg_free(msg);
+    return exit_code;
 }
