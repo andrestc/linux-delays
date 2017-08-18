@@ -132,7 +132,7 @@ int main(int argc, char *argv[])
         goto teardown;
     }
 
-    if ((err = nl_send_auto(sk, msg)) < 0) {
+    if ((err = nl_send_sync(sk, msg)) < 0) {
         fprintf(stderr, "Error sending message: %s\n", nl_geterror(err));
         exit_code = 1;
         goto teardown;
