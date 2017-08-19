@@ -123,30 +123,30 @@ int main(int argc, char *argv[])
         NLM_F_REQUEST, TASKSTATS_CMD_GET, TASKSTATS_VERSION))) {
         fprintf(stderr, "Error setting message header\n");
         exit_code = 1;
-        goto teardown;
+        goto teardownMsg;
     }
 
     if ((err = nla_put_u32(msg, TASKSTATS_CMD_ATTR_PID, pid)) < 0) {
         fprintf(stderr, "Error setting attribute: %s\n", nl_geterror(err));
         exit_code = 1;
-        goto teardown;
+        goto teardownMsg;
     }
 
     if ((err = nl_send_sync(sk, msg)) < 0) {
         fprintf(stderr, "Error sending message: %s\n", nl_geterror(err));
         exit_code = 1;
-        goto teardown;
+        goto teardownMsg;
     }
 
     if ((err = nl_recvmsgs_default(sk)) < 0) {
         fprintf(stderr, "Error receiving message: %s\n", nl_geterror(err));
         exit_code = 1;
-        goto teardown;
+        goto teardownMsg;
     }
-
+teardownMsg:
+    nlmsg_free(msg);
 teardown:
     nl_close(sk);
     nl_socket_free(sk);
-    nlmsg_free(msg);
     return exit_code;
 }
