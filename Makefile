@@ -7,6 +7,7 @@ _OBJ = getdelays.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: %.c $(DEPS)
+	@mkdir -p $(@D)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 getdelays: $(OBJ)
@@ -18,4 +19,4 @@ clean:
 	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~
 
 dbg: getdelays
-	NLDBG=1 NLCB=debug ./getdelays 
+	NLDBG=1 NLCB=debug ./getdelays
