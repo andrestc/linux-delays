@@ -7,6 +7,12 @@ libnl to fetch data from the Netlink interface.
 
 `$ sudo ./getdelays <PID>`
 
+It is possible to fetch delay accounting information without running as root,
+providing CAP_NET_ADMIN capabilities to the binary:
+
+` $ sudo setcap cap_net_admin+ep ./getdelays`
+
+
 ## Whats linux delay accounting?
 
 Docs available at: https://www.kernel.org/doc/Documentation/accounting/delay-accounting.txt
